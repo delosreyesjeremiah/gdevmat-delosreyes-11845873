@@ -14,7 +14,7 @@ void draw()
   int r = int(random(256)); // randomize the red values (0 to 255
   int g = int(random(256)); // randomize the green values (0 to 255)
   int b = int(random(256)); // randomize the blue values (0 to 255)
-  int a = int(random(10, 101)); // randomize the alpha values (50 to 100)
+  int a = int(random(10, 101)); // randomize the alpha values (10 to 100)
   
   // controls the spawn location
   float gaussian = randomGaussian(); // controls spawn location using gaussian distribution
