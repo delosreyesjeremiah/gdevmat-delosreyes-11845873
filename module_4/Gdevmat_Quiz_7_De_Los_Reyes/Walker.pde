@@ -1,60 +1,67 @@
 class Walker
 {
-  PVector walkerPosition = new PVector(); // initialize the position
+  private PVector position = new PVector(); // initialize the position
  
-  PVector mousePosition = new PVector(); // the mouse position
-  PVector direction = new PVector(); // the direction between the mouse and the walker
-  PVector velocity = new PVector(); // the velocity
- 
-  float scale; // the size of the walker
-  float acceleration = 1.0f; // the acceleration
-  float velocityLimit = 10; // add a limit to the velocity
+  private PVector direction = new PVector(); // the direction 
+  private PVector velocity = new PVector(); // the velocity
+  private PVector acceleration = new PVector(); // the acceleration
   
-  boolean counted = false; // variable to check if a walker has been counted
+  private float scale; // the size of the walker
+  private float accelerationSpeed; // the acceleration speed
+  private float velocityLimit; // add a limit to the velocity
   
   // rgba values
-  int r;
-  int g;
-  int b;
-  int a;
+  private float r;
+  private float g;
+  private float b;
+  private float a;
   
-  // the function that spawns the walker at random locations with random properties
-  void spawn()
+  // the function that sets the scale of the walker
+  public void setScale(float value)
   {
-    walkerPosition.x = Window.windowWidth * randomGaussian(); 
-    walkerPosition.y = Window.windowHeight * randomGaussian();
-    scale = random(1, 51);
-   
-    r = int(random(256));
-    g = int(random(256));
-    b = int(random(256));
-    a = int(random(50, 151));
+    scale = value;
   }
- 
-  // the function that renders the walker
-  void render()
+  
+  // the function that sets the acceleration speed of the walker
+  public void setAcceleration(float value)
   {
+    accelerationSpeed = value;
+  }
+  
+  // the function that sets the velocity limit of the walker
+  public void setVelocityLimit(float value)
+  {
+    velocityLimit = value;
+  }
+  
+  // the function that sets the rgba values of the walker
+  public void setColor(float red, float green, float blue, float alpha)
+  {
+    r = red;
+    g = green;
+    b = blue;
+    a = alpha;
+  }
+  
+  // the function that renders the walker at a specific location
+  public void render(float x, float y)
+  {
+    position.x = x;
+    position.y = y;
+    
     fill(r, g, b, a);
     noStroke();
-    circle(walkerPosition.x, walkerPosition.y, scale); 
+    circle(position.x, position.y, scale); 
   }
- 
-  // the function that establishes the direction of the walker movement
-  void getDirection()
+
+  // the function that makes the walker accelerate towards a target
+  public void accelerate(PVector target)
   {
-    mousePosition = mousePos(); // initialize the mouse position
-    direction = PVector.sub(mousePosition, walkerPosition); // get the direction between the mouse and the walker
-    velocity = direction.normalize(); // initialize the velocity
-  }
- 
-  // the function that makes the walker move
-  void move()
-  {
-    velocity = direction.normalize().mult(acceleration); // apply acceleration to the velocity
-   
+    direction = PVector.sub(target, position); // get the direction between the target destination and the walker position
+    acceleration = direction.normalize().mult(accelerationSpeed); // assign the normalized direction to the acceleration
+    
+    this.velocity.add(this.acceleration); // apply the acceleration to the velocity
     this.velocity.limit(velocityLimit); // apply a limit to the velocity
-    this.walkerPosition.add(this.velocity); // apply the velocity to the walker
-   
-    acceleration += 0.2f; // increase acceleration by 0.2
+    this.position.add(this.velocity); // apply the velocity to the walker
   }
 }

@@ -1,10 +1,6 @@
 
 Walker[] walkers = new Walker[100]; // initialize the walker array
 
-boolean spawn = true; // the "spawn" boolean ensures that the initial random spawning only happens once
-
-int counter = 0;
-
 // the function that gets called at the very first frame
 void setup()
 {
@@ -15,56 +11,23 @@ void setup()
   for (int i = 0; i < 100; i++)
   {
     walkers[i] = new Walker();
+    walkers[i].setColor(random(256), random(256), random(256), random(50, 151));
+    walkers[i].setScale(random(1, 25));
+    walkers[i].setAcceleration(0.2f);
+    walkers[i].setVelocityLimit(10.0f);
+    walkers[i].render(Window.windowWidth * randomGaussian(), Window.windowHeight * randomGaussian());
   }
 }
 
 // the function that gets called every frame
 void draw()
 {
-  // flush the screen
   background(80);
   
-  // spawn the walkers
-  if (spawn == true)
+  for (Walker walker : walkers)
   {
-    for (int i = 0; i < 100; i++)
-    {
-      walkers[i].spawn();
-    }
-    spawn = false;
-  }
-  
-  for (int i = 0; i < 100; i++)
-  {
-    // only render the walker if the walker it has not been counted (not yet reached the mouse position)
-    if (walkers[i].counted == false)
-    {
-      walkers[i].render(); // render the walker
-      walkers[i].getDirection(); // get the direction of the walker movement
-      walkers[i].move(); // make the walker move
-      
-      // get the distance between the walker position and the mouse position
-      PVector distance = PVector.sub(walkers[i].mousePosition, walkers[i].walkerPosition);
-      
-      // if the walker reaches the mouse position
-      if ((distance.mag() <= 5) && (walkers[i].counted == false))
-      {
-        counter++; // increment the counter
-        walkers[i].counted = true; // the walker has been counted
-      }
-    }
-  }
-  
-  // if the counter reaches 100, reset the counter and spawning conditions
-  if (counter >= 100)
-  {
-    spawn = true;
-    counter = 0;
-    
-    for (int i = 0; i < 100; i++)
-    {
-      walkers[i].counted = false;  
-    }
+    walker.render(walker.position.x, walker.position.y); // render the walker
+    walker.accelerate(mousePos()); // accelerate the walker to the target
   }
 }
 
