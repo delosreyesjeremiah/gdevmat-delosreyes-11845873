@@ -1,46 +1,65 @@
 class Walker
 {
-  int mass;
-  int scale;
+  private float mass;
+  private float scale;
   
-  PVector position = new PVector();
-  PVector acceleration = new PVector();
-  PVector velocity = new PVector();
+  private PVector position = new PVector();
+  private PVector acceleration = new PVector();
+  private PVector velocity = new PVector();
   
-  float velocityLimit = 10;
+  private float velocityLimit;
 
-  float r;
-  float g;
-  float b;
-
-  // function that randomizes the color of the walker
-  void randomColor()
+  private float r;
+  private float g;
+  private float b;
+  private float a;
+  
+  // the function that sets the scale of the walker
+  public void setScale(float value)
   {
-    r = int(random(256)); // randomize the red values (0 to 255)
-    g = int(random(256)); // randomize the green values (0 to 255)
-    b = int(random(256)); // randomize the blue values (0 to 255)
+    scale = value;
+  }
+  
+  // the function that sets the mass of the walker
+  public void setMass(float value)
+  {
+    mass = value;
+  }
+  
+  // the function that sets the velocity limit of the walker
+  public void setVelocityLimit(float value)
+  {
+    velocityLimit = value;
+  }
+  
+  // the function that sets the rgba values of the walker
+  public void setColor(float red, float green, float blue, float alpha)
+  {
+    r = red;
+    g = green;
+    b = blue;
+    a = alpha;
   }
   
   // function that renders the walker
-  void render(float x, float y)
+  public void render(float x, float y)
   {
     position.x = x;
     position.y = y;
     
-    fill(r, g, b);
-    stroke(0.1);
+    fill(r, g, b, a);
     circle(position.x, position.y, scale);
   }
   
   // function that applies the force to the walker
-  void applyForce(PVector force)
+  public void applyForce(PVector force)
   {
     PVector f = PVector.div(force, this.mass);
     this.acceleration.add(f);
   }
   
-  // function that moves the walker
-  void move()
+  // function that updates the walker's status based on the applied forces
+  public void update()
   {
     this.velocity.add(acceleration); // apply the acceleration
     this.velocity.limit(velocityLimit); // set a limit to the velocity
@@ -49,16 +68,34 @@ class Walker
   }
   
   // function that applies a bounce force to the walker
-  void applyBounce()
+  public void applyBounce()
   {
-     if ((position.x > Window.right) || (position.x < Window.left))
+     if ((position.x >= Window.right) || (position.x <= Window.left))
     {
       velocity.x *= -1;
+      
+      if (position.x >= Window.right)
+      {
+        position.x = Window.right;
+      }
+      else if (position.x <= Window.left)
+      {
+        position.x = Window.left;
+      }
     }
 
-    if ((position.y > Window.top) || (position.y < Window.bottom))
+    if ((position.y >= Window.top) || (position.y <= Window.bottom))
     {
       velocity.y *= -1;
+      
+      if (position.y >= Window.top)
+      {
+        position.y = Window.top;
+      }
+      else if (position.y <= Window.bottom)
+      {
+        position.y = Window.bottom;
+      }
     }
   }
 }

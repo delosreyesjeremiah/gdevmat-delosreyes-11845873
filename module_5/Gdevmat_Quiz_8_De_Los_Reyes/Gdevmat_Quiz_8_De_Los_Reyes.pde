@@ -15,9 +15,10 @@ void setup()
   for (int i = 0; i < 10; i++)
   {
     walkers[i] = new Walker();
-    walkers[i].mass = 10 - i;
-    walkers[i].scale = walkers[i].mass * 15;
-    walkers[i].randomColor();
+    walkers[i].setMass(10 - i);
+    walkers[i].setScale(walkers[i].mass * 15);
+    walkers[i].setColor(random(256), random(256), random(256), 255);
+    walkers[i].setVelocityLimit(10);
     walkers[i].render(-500, 200);
   }
 }
@@ -27,12 +28,14 @@ void draw()
 {
   background(80); 
   
+  stroke(0.1);
+  
   for (Walker walker : walkers)
   {
     walker.render(walker.position.x, walker.position.y); // render the walker
     walker.applyForce(wind); // apply the wind
     walker.applyForce(gravity); // apply the gravity
-    walker.move(); // walker moves due to forces acting on it
+    walker.update(); // update the walker due to applied forces
     walker.applyBounce(); // apply a bounce force to the walker when necessary
   }
 }
