@@ -1,8 +1,6 @@
 
 Walker[] walkers = new Walker[8]; // initialize the walker array
 
-PVector acceleration = new PVector();
-
 // the function that resets the walkers
 void resetWalkers()
 {
